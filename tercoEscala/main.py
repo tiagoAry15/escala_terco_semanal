@@ -2,7 +2,6 @@ import math
 import random
 import tkinter as tk
 from tkinter import ttk, messagebox
-from ttkwidgets.autocomplete import AutocompleteCombobox
 
 
 def ler_nomes_do_arquivo(nome_arquivo):
@@ -16,7 +15,7 @@ def ler_nomes_do_arquivo(nome_arquivo):
 
 
 class TercoEscalaApp:
-    def __init__(self, _root):
+    def __init__(self, root):
         self.tabela_nomes = None
         self.dropdown_nome = None
         self.dropdown_dia = None
@@ -28,8 +27,8 @@ class TercoEscalaApp:
 
         # Lista de nomes lidos do arquivo
         self.nomes = ler_nomes_do_arquivo("nomes.txt")
-        self.num_max_pessoas_por_dia = math.ceil(len(self.nomes)/len(self.dias_semana))
-        self.num_min_pessoas_por_dia = math.floor(len(self.nomes)/len(self.dias_semana))
+        self.num_max_pessoas_por_dia = math.ceil(len(self.nomes) / len(self.dias_semana))
+        self.num_min_pessoas_por_dia = math.floor(len(self.nomes) / len(self.dias_semana))
         # criar dicionario dos dias da semana
         self.terco_semanal = {dia: set() for dia in self.dias_semana}
 
@@ -44,15 +43,13 @@ class TercoEscalaApp:
         # Dropdown para os dias da semana
         label_dia = tk.Label(self.root, text="Selecione o Dia:")
         label_dia.pack(pady=10)
-        self.dropdown_dia = AutocompleteCombobox(self.root, completevalues=self.dias_semana,
-                                                 textvariable=self.dia_selecionado)
+        self.dropdown_dia = ttk.Combobox(self.root, values=self.dias_semana, textvariable=self.dia_selecionado)
         self.dropdown_dia.pack(pady=10)
 
         # Dropdown para os nomes lidos do arquivo
         label_nome = tk.Label(self.root, text="Selecione o Nome:")
         label_nome.pack(pady=10)
-        self.dropdown_nome = AutocompleteCombobox(self.root, completevalues=self.nomes,
-                                                  textvariable=self.nome_selecionado)
+        self.dropdown_nome = ttk.Combobox(self.root, values=self.nomes, textvariable=self.nome_selecionado)
         self.dropdown_nome.pack(pady=10)
 
         # Botão de confirmação
@@ -83,7 +80,6 @@ class TercoEscalaApp:
             self.nomes.remove(nome)
 
             # Atualizar os valores do dropdown e a tabela
-
             self.atualizar_tabela()
             self.verificar_se_dia_esta_cheio(dia)
             self.atualizar_dropdowns()
@@ -111,11 +107,11 @@ class TercoEscalaApp:
     def atualizar_dropdowns(self):
         # Atualizar valores do dropdown de dias da semana
         self.dia_selecionado.set("")
-        self.dropdown_dia.set_completion_list(self.dias_semana)
+        self.dropdown_dia['values'] = self.dias_semana
 
         # Atualizar valores do dropdown de nomes
         self.nome_selecionado.set("")
-        self.dropdown_nome.set_completion_list(self.nomes)
+        self.dropdown_nome['values'] = self.nomes
 
     def atualizar_tabela(self):
         # Limpar a tabela
