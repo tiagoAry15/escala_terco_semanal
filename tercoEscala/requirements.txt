@@ -1,5 +1,2 @@
-math
-random
 tkinter
-ttk
-ttkwidgets
+
